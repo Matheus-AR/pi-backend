@@ -65,6 +65,9 @@ function listarAnuncios(req, res, next){
 
 function listarPorId(req, res, next){
     const anuncioBuscado = anuncios.find(anuncio => anuncio.id === Number(req.params.anuncioId));
+    if (!anuncioBuscado){
+        return res.status(404).json({msg: "Anuncio não existe"});
+    }
     res.status(200).json(anuncioBuscado);
 };
 
@@ -85,6 +88,9 @@ function criarAnuncio(req, res, next){
 
 function alterarAnuncio(req, res, next){
     const anuncioBuscado = anuncios.find(anuncio => anuncio.id === Number(req.params.anuncioId));
+    if (!anuncioBuscado){
+        return res.status(404).json({msg: "Anuncio não existe"});
+    }
     anuncioBuscado.titulo = req.body.titulo;
     anuncioBuscado.descricao = req.body.descricao;
     anuncioBuscado.categoria = req.body.categoria;
@@ -97,6 +103,9 @@ function alterarAnuncio(req, res, next){
 
 function removerAnuncio(req, res, next){
     const indiceDoAnuncio = anuncios.findIndex(anuncio => anuncio.id === Number(req.params.anuncioId));
+    if(!indiceDoAnuncio){
+        return res.status(404).json({msg: "Anuncio não existe"})
+    }
     anuncios.splice(indiceDoAnuncio, 1);
     res.status(204).end();
 }

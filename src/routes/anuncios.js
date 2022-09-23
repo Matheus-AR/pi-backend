@@ -3,7 +3,6 @@ const router = express.Router();
 
 const anunciosController = require('../controllers/anuncios');
 
-
 router.get('/', anunciosController.listarPorCidade, anunciosController.listarPorCategoria, anunciosController.listarAnuncios);
 
 router.get('/:anuncioId', anunciosController.listarPorId);
