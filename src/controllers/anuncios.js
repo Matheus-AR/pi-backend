@@ -42,18 +42,12 @@ const anuncios = [
 ];
 
 function listarPorCidade(req, res, next){
-    if (!req.query.cidade) {
-        return next();
-    }
     const cidadeBuscada = req.query.cidade;
     const anunciosDaMesmaCidade = anuncios.filter(anuncio => anuncio.cidade === cidadeBuscada);
     res.status(200).json(anunciosDaMesmaCidade);
 };
 
 function listarPorCategoria(req, res, next){
-    if (!req.query.categoria) {
-        return next();
-    }
     const categoriaBuscada = req.query.categoria;
     const anunciosDaMesmaCategoria = anuncios.filter(anuncio => anuncio.categoria === categoriaBuscada);
     res.status(200).json(anunciosDaMesmaCategoria);

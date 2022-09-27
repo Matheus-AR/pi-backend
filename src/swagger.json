@@ -1,0 +1,151 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Sistema de classificados de anúcios",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000"
+        }
+    ],
+    "paths": {
+        "/anuncios": {
+            "get": {
+                "description": "Listar todos os anúncios criados.",
+                "tags": ["Anuncios"],
+                "responses": {
+                    "200": {
+                        "description": "uma lista de anúncios deve ser retornada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#components/schemas/Anuncios"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Anuncios"],
+                "description": "Criar um anúncio.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/Anuncios"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "O objeto anuncio criado deve ser retornado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Anuncios"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/anuncios/cidade": {
+            "get": {
+                "description": "Listar todos os anúncios da mesma cidade.",
+                "tags": ["Anuncios"],
+                "parameters": [
+                    {
+                        "name": "cidade",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "uma lista de anúncios da mesma cidade deve ser retornada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#components/schemas/Anuncios"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Anuncios": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "titulo": {
+                        "type": "string",
+                        "example": "Anuncio 1"
+                    },
+                    "descricao": {
+                        "type": "string",
+                        "example": "Este é um anuncio de teste."
+                    },
+                    "categoria": {
+                        "type": "string",
+                        "example": "Básico"
+                    },
+                    "preco": {
+                        "type": "number",
+                        "example": 12.12
+                    },
+                    "anunciante": {
+                        "type": "string",
+                        "example": "Matheus"
+                    },
+                    "contato": {
+                        "type": "string",
+                        "example": "1111-1111"
+                    }
+                }
+            },
+            "Usuarios": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nome": {
+                        "type": "string",
+                        "example": "Matheus"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "matheus@gmail.com"
+                    },
+                    "senha": {
+                        "type": "string",
+                        "example": "12345"
+                    }
+                }
+            }
+        }
+    }
+}
