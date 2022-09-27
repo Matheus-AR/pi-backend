@@ -57,7 +57,7 @@
                 }
             }
         },
-        "/anuncios/cidade": {
+        "/anuncios/cidades": {
             "get": {
                 "description": "Listar todos os anúncios da mesma cidade.",
                 "tags": ["Anuncios"],
