@@ -88,6 +88,114 @@
                     }
                 }
             }
+        },
+        "/anuncios/categorias": {
+            "get": {
+                "description": "Listar todos os anúncios da mesma categoria.",
+                "tags": ["Anuncios"],
+                "parameters": [
+                    {
+                        "name": "categoria",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "uma lista de anúncios da mesma categoria deve ser retornada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#components/schemas/Anuncios"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/anuncios/{id}": {
+            "get": {
+                "description": "Listar anúncio pelo id.",
+                "tags": ["Anuncios"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Um anúncio pelo id deve ser retornada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Anuncios"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Anúncio não encontrado."
+                    }
+                }
+            },
+            "put": {
+                "description": "Alterar anúncio.",
+                "tags": ["Anuncios"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Não é retornado nehum objeto."
+                    },
+                    "404": {
+                        "description": "Não foi encontrado nenhum anúncio com esse id."
+                    }
+                }
+            },
+            "delete": {
+                "description": "Apagar um anúncio especificado pelo id.",
+                "tags": ["Anuncios"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Anúncio foi removido."
+                    },
+                    "404": {
+                        "description": "Não foi encontrado nenhum anúncio com esse id."
+                    }
+                }
+            }
         }
     },
     "components": {
