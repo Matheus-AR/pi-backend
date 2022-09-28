@@ -13,7 +13,9 @@
         "/anuncios": {
             "get": {
                 "description": "Listar todos os anúncios criados.",
-                "tags": ["Anuncios"],
+                "tags": [
+                    "Anuncios"
+                ],
                 "responses": {
                     "200": {
                         "description": "uma lista de anúncios deve ser retornada",
@@ -31,7 +33,9 @@
                 }
             },
             "post": {
-                "tags": ["Anuncios"],
+                "tags": [
+                    "Anuncios"
+                ],
                 "description": "Criar um anúncio.",
                 "requestBody": {
                     "content": {
@@ -72,7 +76,9 @@
         "/anuncios/cidades": {
             "get": {
                 "description": "Listar todos os anúncios da mesma cidade.",
-                "tags": ["Anuncios"],
+                "tags": [
+                    "Anuncios"
+                ],
                 "parameters": [
                     {
                         "name": "cidade",
@@ -100,7 +106,9 @@
         "/anuncios/categorias": {
             "get": {
                 "description": "Listar todos os anúncios da mesma categoria.",
-                "tags": ["Anuncios"],
+                "tags": [
+                    "Anuncios"
+                ],
                 "parameters": [
                     {
                         "name": "categoria",
@@ -128,7 +136,9 @@
         "/anuncios/{id}": {
             "get": {
                 "description": "Listar anúncio pelo id.",
-                "tags": ["Anuncios"],
+                "tags": [
+                    "Anuncios"
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -155,7 +165,9 @@
             },
             "put": {
                 "description": "Alterar anúncio.",
-                "tags": ["Anuncios"],
+                "tags": [
+                    "Anuncios"
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -163,7 +175,7 @@
                         "required": true
                     }
                 ],
-                "requestBody":{
+                "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
@@ -176,7 +188,7 @@
                                         "email": "matheus@gmail.com",
                                         "senha": "12345"
                                     }
-                                } 
+                                }
                             }
                         }
                     }
@@ -234,6 +246,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "type": "object",
                                 "$ref": "#components/schemas/Usuarios"
                             },
                             "examples": {
@@ -251,13 +264,13 @@
                 "responses": {
                     "201": {
                         "description": "Usuário criado.",
-                        "content":{
-                             "application/json": {
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "$ref": "#components/schemas/Usuarios"
                                 }
-                             }
+                            }
                         }
                     }
                 }
@@ -280,32 +293,16 @@
                             "schema": {
                                 "type": "object",
                                 "$ref": "#components/schemas/Usuarios"
-                            },
-                            "examples": {
-                                "usuario": {
-                                    "value": {
-                                        "nome": "Matheus",
-                                        "email": "matheus@gmail.com",
-                                        "senha": "12345"
-                                    }
-                                }
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Sucesso.",
-                        "content": {
-                            "schema": {
-                                "type": "object",
-                                "$ref": "#components/schemas/Usuarios"
-                            }
-                        }
+                        "description": "Sucesso."
                     },
                     "404": {
                         "description": "Usuário não existe"
-
                     }
                 }
             },
