@@ -38,13 +38,25 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#components/schemas/Anuncios"
+                            },
+                            "examples": {
+                                "Anuncio": {
+                                    "value": {
+                                        "titulo": "Anuncio 1",
+                                        "descricao": "Este é um teste.",
+                                        "categoria": "Básico",
+                                        "preco": 12.99,
+                                        "anunciante": "Matheus",
+                                        "contato": "1111-1111"
+                                    }
+                                }
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "O objeto anuncio criado deve ser retornado.",
+                        "description": "Anúncio criado.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -65,11 +77,7 @@
                     {
                         "name": "cidade",
                         "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "style": "simple"
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -97,11 +105,7 @@
                     {
                         "name": "categoria",
                         "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "style": "simple"
+                        "required": false
                     }
                 ],
                 "responses": {
@@ -129,10 +133,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "number"
-                        }
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -159,18 +160,41 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "number"
-                        }
+                        "required": true
                     }
                 ],
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/Usuarios"
+                            },
+                            "examples": {
+                                "usuario": {
+                                    "value": {
+                                        "nome": "Matheus",
+                                        "email": "matheus@gmail.com",
+                                        "senha": "12345"
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Não é retornado nehum objeto."
+                        "description": "Anúncio alterado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Anuncios"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Não foi encontrado nenhum anúncio com esse id."
+                        "description": "Anúncio não encontrado."
                     }
                 }
             },
@@ -181,18 +205,134 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "number"
-                        }
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Anúncio foi removido."
+                        "description": "Anúncio foi removido, não retorna nenhum conteúdo.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Anuncios"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Não foi encontrado nenhum anúncio com esse id."
+                    }
+                }
+            }
+        },
+        "/usuarios": {
+            "post": {
+                "description": "Criar um conta de usuário",
+                "tags": ["Usuários"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/Usuarios"
+                            },
+                            "examples": {
+                                "Usuario": {
+                                    "value": {
+                                        "nome": "Matheus",
+                                        "email": "matheus@gmail.com",
+                                        "senha": "12345"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado.",
+                        "content":{
+                             "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Usuarios"
+                                }
+                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/usuarios/{id}": {
+            "put": {
+                "description": "Alterar dados do usuário.",
+                "tags": ["Usuários"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "ïn": "path",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#components/schemas/Usuarios"
+                            },
+                            "examples": {
+                                "usuario": {
+                                    "value": {
+                                        "nome": "Matheus",
+                                        "email": "matheus@gmail.com",
+                                        "senha": "12345"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso.",
+                        "content": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#components/schemas/Usuarios"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não existe"
+
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remover usuário cadastrado.",
+                "tags": ["Usuários"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário removido",
+                        "content": {
+                            "application/json": {
+                                "schemas": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Usuarios"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
                     }
                 }
             }

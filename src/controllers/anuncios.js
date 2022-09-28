@@ -92,7 +92,7 @@ function alterarAnuncio(req, res, next){
     anuncioBuscado.cidade = req.body.cidade;
     anuncioBuscado.contato = req.body.contato;
 
-    res.status(204).end();
+    res.status(200).json(anuncioBuscado);
 };
 
 function removerAnuncio(req, res, next){
@@ -100,8 +100,9 @@ function removerAnuncio(req, res, next){
     if(!indiceDoAnuncio){
         return res.status(404).json({msg: "Anuncio não existe"})
     }
+    const anuncioRemovido = anuncios[indiceDoAnuncio];
     anuncios.splice(indiceDoAnuncio, 1);
-    res.status(204).end();
+    res.status(200).json(anuncioRemovido);
 }
 
 module.exports = { listarPorCidade, listarPorCategoria, listarAnuncios, listarPorId, criarAnuncio, alterarAnuncio, removerAnuncio };

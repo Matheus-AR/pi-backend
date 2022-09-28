@@ -28,8 +28,9 @@ function removerUsuario(req, res, next){
     if (posicaoDoUsuarioBuscado < 0){
         return res.status(404).json({msg: "Usuario não existe"})
     }
+    const usuarioRemovido = usuarios[posicaoDoUsuarioBuscado];
     usuarios.splice(posicaoDoUsuarioBuscado, 1);
-    res.status(204).end();
+    res.status(200).json(usuarioRemovido);
 }
 
 module.exports = { criarUsuario, alterarUsuario, removerUsuario };
