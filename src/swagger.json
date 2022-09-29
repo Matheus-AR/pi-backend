@@ -13,9 +13,7 @@
         "/anuncios": {
             "get": {
                 "description": "Listar todos os anúncios criados.",
-                "tags": [
-                    "Anuncios"
-                ],
+                "tags": ["Anuncios"],
                 "responses": {
                     "200": {
                         "description": "uma lista de anúncios deve ser retornada",
@@ -33,9 +31,7 @@
                 }
             },
             "post": {
-                "tags": [
-                    "Anuncios"
-                ],
+                "tags": ["Anuncios"],
                 "description": "Criar um anúncio.",
                 "requestBody": {
                     "content": {
@@ -76,9 +72,7 @@
         "/anuncios/cidades": {
             "get": {
                 "description": "Listar todos os anúncios da mesma cidade.",
-                "tags": [
-                    "Anuncios"
-                ],
+                "tags": ["Anuncios"],
                 "parameters": [
                     {
                         "name": "cidade",
@@ -106,9 +100,7 @@
         "/anuncios/categorias": {
             "get": {
                 "description": "Listar todos os anúncios da mesma categoria.",
-                "tags": [
-                    "Anuncios"
-                ],
+                "tags": ["Anuncios"],
                 "parameters": [
                     {
                         "name": "categoria",
@@ -136,9 +128,7 @@
         "/anuncios/{id}": {
             "get": {
                 "description": "Listar anúncio pelo id.",
-                "tags": [
-                    "Anuncios"
-                ],
+                "tags": ["Anuncios"],
                 "parameters": [
                     {
                         "name": "id",
@@ -165,9 +155,7 @@
             },
             "put": {
                 "description": "Alterar anúncio.",
-                "tags": [
-                    "Anuncios"
-                ],
+                "tags": ["Anuncios"],
                 "parameters": [
                     {
                         "name": "id",
@@ -179,14 +167,17 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#components/schemas/Usuarios"
+                                "$ref": "#components/schemas/Anuncios"
                             },
                             "examples": {
-                                "usuario": {
+                                "Anuncio": {
                                     "value": {
-                                        "nome": "Matheus",
-                                        "email": "matheus@gmail.com",
-                                        "senha": "12345"
+                                        "titulo": "Anuncio 1",
+                                        "descricao": "Este é um teste.",
+                                        "categoria": "Básico",
+                                        "preco": 12.99,
+                                        "anunciante": "Matheus",
+                                        "contato": "1111-1111"
                                     }
                                 }
                             }
@@ -239,6 +230,23 @@
             }
         },
         "/usuarios": {
+            "get": {
+                "tags": ["Usuários"],
+                "description": "Listar todos os usuários",
+                
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "$ref": "#components/schemas/Usuarios"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Criar um conta de usuário",
                 "tags": ["Usuários"],
@@ -278,12 +286,12 @@
         },
         "/usuarios/{id}": {
             "put": {
-                "description": "Alterar dados do usuário.",
                 "tags": ["Usuários"],
+                "description": "Alterar um usuário pelo id.",
                 "parameters": [
                     {
                         "name": "id",
-                        "ïn": "path",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -293,22 +301,40 @@
                             "schema": {
                                 "type": "object",
                                 "$ref": "#components/schemas/Usuarios"
+                            },
+                            "examples": {
+                                "Usuario": {
+                                    "value": {
+                                        "nome": "Matheus",
+                                        "email": "matheus@gmail.com",
+                                        "senha": "12345"
+                                    }
+                                }
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Sucesso."
+                        "description": "Usuário criado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Usuarios"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Usuário não existe"
+                        "description": "Usuário não foi encontrado."
                     }
                 }
+
             },
             "delete": {
-                "description": "Remover usuário cadastrado.",
                 "tags": ["Usuários"],
+                "description": "Remover um usuário pelo id.",
                 "parameters": [
                     {
                         "name": "id",
@@ -317,19 +343,11 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Usuário removido",
-                        "content": {
-                            "application/json": {
-                                "schemas": {
-                                    "type": "object",
-                                    "$ref": "#components/schemas/Usuarios"
-                                }
-                            }
-                        }
+                    "204": {
+                        "description": "Usuário removido."
                     },
                     "404": {
-                        "description": "Usuário não encontrado"
+                        "description": "Usuário não foi encontrado."
                     }
                 }
             }

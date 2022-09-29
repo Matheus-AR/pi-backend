@@ -1,4 +1,23 @@
-const usuarios = [];
+const usuarios = [
+    {
+        id: 1,
+        nome: "Matheus",
+        email: "matheus@gmail.com",
+        senha: "1234"
+    },
+    {
+        id: 2,
+        nome: "Roberto",
+        email: "roberto@gmail.com",
+        senha: "12456"
+    },
+    {
+        id: 3,
+        nome: "Gabreil",
+        email: "gabriel@gmail.com",
+        senha: "12784"
+    }
+];
 
 function criarUsuario(req, res, next){
     const novoUsuario = {
@@ -28,9 +47,8 @@ function removerUsuario(req, res, next){
     if (posicaoDoUsuarioBuscado < 0){
         return res.status(404).json({msg: "Usuario não existe"})
     }
-    const usuarioRemovido = usuarios[posicaoDoUsuarioBuscado];
     usuarios.splice(posicaoDoUsuarioBuscado, 1);
-    res.status(200).json(usuarioRemovido);
+    res.status(204).end();
 }
 
 module.exports = { criarUsuario, alterarUsuario, removerUsuario };
