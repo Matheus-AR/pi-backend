@@ -1,45 +1,5 @@
-const anuncios = [
-    {
-        id: 1,
-        titulo: "Anuncio 1",
-        descricao: "Este é um anuncio de teste.",
-        categoria: "Básico",
-        preco: 12.12,
-        anunciante: "Matheus",
-        cidade: "Brasília",
-        contato: "1111-1111"
-    },
-    {
-        id: 2,
-        titulo: "Anuncio 2",
-        descricao: "Este é um anuncio de teste.",
-        categoria: "Básico",
-        preco: 13.23,
-        anunciante: "Matheus",
-        cidade: "Brasília",
-        contato: "1111-1111",
-    },
-    {
-        id: 3,
-        titulo: "Anuncio 3",
-        descricao: "Este é um anuncio de teste.",
-        categoria: "Especial",
-        preco: 120.00,
-        anuncinate: "Maria",
-        cidade: "Maceió",
-        contato: "2222-2222"
-    },
-    {
-        id:4,
-        titulo: "Anuncio 4",
-        descricao: "Este é um anuncio de teste.",
-        categoria: "Especial",
-        preco: 200.50,
-        anunciante: "Jorge",
-        cidade: "São Paulo",
-        contato: "3333-3333"
-    }
-];
+const { ObjectId } = require('bson');
+const Anuncio = require('../models/anunciosModel');
 
 function listarPorCidade(req, res, next){
     const cidadeBuscada = req.query.cidade;
@@ -47,62 +7,58 @@ function listarPorCidade(req, res, next){
     res.status(200).json(anunciosDaMesmaCidade);
 };
 
-function listarPorCategoria(req, res, next){
-    const categoriaBuscada = req.query.categoria;
-    const anunciosDaMesmaCategoria = anuncios.filter(anuncio => anuncio.categoria === categoriaBuscada);
-    res.status(200).json(anunciosDaMesmaCategoria);
+async function listarPorCategoria(req, res, next){
+    await Anuncio.find({categoria: req.query.categoria})
+        .then(anuncios => { 
+            if (anuncios) return res.status(200).json(anuncios);
+            else return res.status(404).json('Não foram encontrados anúncios dessa categoria')
+        })
+        .catch(error => { return res.status(500).json(error) });
 };
 
-function listarAnuncios(req, res, next){
-    res.status(200).json(anuncios);
+async function listarAnuncios(req, res, next){
+    await Anuncio.find({})
+        .then(anuncios => { return res.status(200).json(anuncios)})
+        .catch(error => { return res.status(500).json(error)});
 };
 
-function listarPorId(req, res, next){
-    const anuncioBuscado = anuncios.find(anuncio => anuncio.id === Number(req.params.anuncioId));
-    if (!anuncioBuscado){
-        return res.status(404).json({msg: "Anuncio não existe"});
-    }
-    res.status(200).json(anuncioBuscado);
+async function listarPorId(req, res, next){
+    await Anuncio.findOne({_id: ObjectId(req.params.id)})
+        .then(anuncio => {
+            if (anuncio) return res.status(200).json(anuncio);
+            else return res.status(404).json('Anúncio não encontrado');
+        })
+        .catch(error => { return res.status(500).json(error) });
 };
 
-function criarAnuncio(req, res, next){
-    const novoAnuncio = {
-        id: anuncios.length + 1,
-        titulo: req.body.titulo,
-        descricao: req.body.descricao,
-        categoria: req.body.categoria,
-        preco: req.body.preco,
-        anunciante: req.body.anunciante,
-        cidade: req.body.cidade,
-        contato: req.body.contato
-    }
-    anuncios.push(novoAnuncio);
-    res.status(201).json(novoAnuncio);
+async function criarAnuncio(req, res, next){
+    const anuncio = new Anuncio(req.body);
+    await anuncio.save()
+        .then(doc => { return res.status(201).json(doc)})
+        .catch(error => {
+            const msgErro = {};
+            Object.values(error.errors).forEach(({properties}) => {
+                msgErro[properties.path] = properties.message;
+            });
+        });
 };
 
-function alterarAnuncio(req, res, next){
-    const anuncioBuscado = anuncios.find(anuncio => anuncio.id === Number(req.params.anuncioId));
-    if (!anuncioBuscado){
-        return res.status(404).json({msg: "Anuncio não existe"});
-    }
-    anuncioBuscado.titulo = req.body.titulo;
-    anuncioBuscado.descricao = req.body.descricao;
-    anuncioBuscado.categoria = req.body.categoria;
-    anuncioBuscado.preco = req.body.preco;
-    anuncioBuscado.cidade = req.body.cidade;
-    anuncioBuscado.contato = req.body.contato;
-
-    res.status(200).json(anuncioBuscado);
+async function alterarAnuncio(req, res, next){
+    await Anuncio.findOneAndUpdate({_id: ObjectId(req.params.id)}, req.body, { runValidators: true})
+        .then(anuncio => {
+            if (anuncio) return res.status(204).end();
+            else return res.status(404).json('Anúncio não encontrado');
+        })
+        .catch(error => { return res.status(500).json(error) });
 };
 
-function removerAnuncio(req, res, next){
-    const indiceDoAnuncio = anuncios.findIndex(anuncio => anuncio.id === Number(req.params.anuncioId));
-    if(!indiceDoAnuncio){
-        return res.status(404).json({msg: "Anuncio não existe"})
-    }
-    const anuncioRemovido = anuncios[indiceDoAnuncio];
-    anuncios.splice(indiceDoAnuncio, 1);
-    res.status(200).json(anuncioRemovido);
+async function removerAnuncio(req, res, next){
+    await Anuncio.findOneAndDelete({_id: ObjectId(req.params.id)})
+        .then(anuncio => {
+            if (anuncio) return res.status(204).end();
+            else return res.status(404).json('Anúncio não encontrado')
+        })
+        .catch(error => { return res.status(500).json(error)});
 }
 
 module.exports = { listarPorCidade, listarPorCategoria, listarAnuncios, listarPorId, criarAnuncio, alterarAnuncio, removerAnuncio };
