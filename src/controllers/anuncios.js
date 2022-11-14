@@ -1,10 +1,13 @@
 const { ObjectId } = require('bson');
 const Anuncio = require('../models/anunciosModel');
 
-function listarPorCidade(req, res, next){
-    const cidadeBuscada = req.query.cidade;
-    const anunciosDaMesmaCidade = anuncios.filter(anuncio => anuncio.cidade === cidadeBuscada);
-    res.status(200).json(anunciosDaMesmaCidade);
+async function listarPorCidade(req, res, next){
+    await Anuncio.find({cidade: req.query.cidade})
+        .then(anuncios => { 
+            if (anuncios) return res.status(200).json(anuncios);
+            else return res.status(404).json('Não foram encontrados anúncios dessa cidade')
+        })
+        .catch(error => { return res.status(500).json(error) });
 };
 
 async function listarPorCategoria(req, res, next){
