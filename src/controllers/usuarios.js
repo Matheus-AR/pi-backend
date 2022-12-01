@@ -48,6 +48,11 @@ async function login(req, res, next) {
 
 
 async function removerUsuario(req, res, next){
+    const idParametro = req.params.usuarioId;
+    const idAutorizacao = req.body.id;
+    if (idParametro !== idAutorizacao) {
+        return res.status(401).json({ erro: 'Não autorizado'})
+    }
     await Usuario.findOneAndDelete({ _id: ObjectId(req.body.id)})
         .then(usuario => {
             if (usuario) return res.status(204).end();
