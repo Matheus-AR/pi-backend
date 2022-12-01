@@ -27,12 +27,18 @@ const anuncioSchema = mongoose.Schema({
         min: [0.01, 'O preço deve ser maior zero'],
         required: [ true, 'O preço é obrigatório']
     },
-    anunciante: {
+    emailAnunciante: {
         type: String,
         trim: true,
         minLength: [3, 'O nome do anunciante deve ter pelo menos 3 caracteres'],
         maxLength: [35, 'O nome do anuciante não pode passar de 35 caracteres'],
-        required: [ true, 'O anunciante é obrigatório']
+        required: [ true, 'O email anunciante é obrigatório'],
+        validate: {
+            validator: function(email){
+                return /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/.test(email);
+            },
+            message: '{VALUE} não é um e-mail válido'
+        }
     },
     cidade: {
         type: String,
