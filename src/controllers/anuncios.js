@@ -5,33 +5,43 @@ async function listarPorCidade(req, res, next){
     await Anuncio.find({cidade: req.query.cidade})
         .then(anuncios => { 
             if (anuncios) return res.status(200).json(anuncios);
-            else return res.status(404).json('Não foram encontrados anúncios dessa cidade')
+            else return res.status(404).json({ erro: 'Não foram encontrados anúncios dessa cidade' })
         })
-        .catch(error => { return res.status(500).json(error) });
+        .catch(error => { 
+            return res.status(500).json({ erro: error.message }) 
+        });
 };
 
 async function listarPorCategoria(req, res, next){
     await Anuncio.find({categoria: req.query.categoria})
         .then(anuncios => { 
             if (anuncios) return res.status(200).json(anuncios);
-            else return res.status(404).json('Não foram encontrados anúncios dessa categoria')
+            else return res.status(404).json({ erro: 'Não foram encontrados anúncios dessa categoria' })
         })
-        .catch(error => { return res.status(500).json(error) });
+        .catch(error => { 
+            return res.status(500).json(error) 
+        });
 };
 
 async function listarAnuncios(req, res, next){
     await Anuncio.find({})
-        .then(anuncios => { return res.status(200).json(anuncios)})
-        .catch(error => { return res.status(500).json(error)});
+        .then(anuncios => { 
+            return res.status(200).json(anuncios)
+        })
+        .catch(error => { 
+            return res.status(500).json(error)
+        });
 };
 
 async function listarPorId(req, res, next){
     await Anuncio.findOne({_id: ObjectId(req.params.id)})
         .then(anuncio => {
             if (anuncio) return res.status(200).json(anuncio);
-            else return res.status(404).json('Anúncio não encontrado');
+            else return res.status(404).json({ erro: 'Anúncio não encontrado' });
         })
-        .catch(error => { return res.status(500).json(error) });
+        .catch(error => { 
+            return res.status(500).json({ erro: error.message}) 
+        });
 };
 
 async function criarAnuncio(req, res, next){
@@ -39,10 +49,13 @@ async function criarAnuncio(req, res, next){
     await anuncio.save()
         .then(doc => { return res.status(201).json(doc)})
         .catch(error => {
-            const msgErro = {};
-            Object.values(error.errors).forEach(({properties}) => {
-                msgErro[properties.path] = properties.message;
-            });
+            const msg = {};
+            if (error.errors) {
+                Object.values(error.errors).forEach(({properties}) => {
+                    msg[properties.path] = properties.message;
+                });
+            }
+            return res.status(422).json(msg);
         });
 };
 
@@ -50,18 +63,28 @@ async function alterarAnuncio(req, res, next){
     await Anuncio.findOneAndUpdate({_id: ObjectId(req.params.id)}, req.body, { runValidators: true})
         .then(anuncio => {
             if (anuncio) return res.status(204).end();
-            else return res.status(404).json('Anúncio não encontrado');
+            else return res.status(404).json({ erro: 'Anúncio não encontrado' });
         })
-        .catch(error => { return res.status(500).json(error) });
+        .catch(error => {
+            const msg = {};
+            if (error.errors) {
+                Object.values(error.errors).forEach(({ properties }) =>{
+                    msg[properties.path] = properties.message;
+                });
+            }
+            return res.status(422).json(msg);
+        });
 };
 
 async function removerAnuncio(req, res, next){
     await Anuncio.findOneAndDelete({_id: ObjectId(req.params.id)})
         .then(anuncio => {
             if (anuncio) return res.status(204).end();
-            else return res.status(404).json('Anúncio não encontrado')
+            else return res.status(404).json({ erro: 'Anúncio não encontrado' })
         })
-        .catch(error => { return res.status(500).json(error)});
+        .catch(error => {
+            return res.status(422).json({ erro: error.message });
+        });
 }
 
 module.exports = { listarPorCidade, listarPorCategoria, listarAnuncios, listarPorId, criarAnuncio, alterarAnuncio, removerAnuncio };
