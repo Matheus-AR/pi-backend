@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Sistema de classificados de anúcios",
+        "title": "Sistema de classificação de anúncios",
         "version": "1.0.0"
     },
     "servers": [
@@ -332,42 +332,46 @@
             "Anuncios": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 1
+                    "_id": {
+                        "type": "string",
+                        "example": "6387efe4a9efa911d3a19770"
                     },
                     "titulo": {
                         "type": "string",
-                        "example": "Anuncio 1"
+                        "example": "Apartamento"
                     },
                     "descricao": {
                         "type": "string",
-                        "example": "Este é um anuncio de teste."
+                        "example": "2 quartos, sala e cozinha juntas, 1 banheiro"
                     },
                     "categoria": {
                         "type": "string",
-                        "example": "Básico"
+                        "example": "Imóveis"
                     },
                     "preco": {
                         "type": "number",
-                        "example": 12.12
+                        "example": 100000.00
                     },
                     "anunciante": {
                         "type": "string",
                         "example": "Matheus"
                     },
+                    "cidade": {
+                        "type": "string",
+                        "example": "Brasília"
+                    },
                     "contato": {
                         "type": "string",
-                        "example": "1111-1111"
+                        "example": "(61)1212-1212"
                     }
                 }
             },
             "Usuarios": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 1
+                    "_id": {
+                        "type": "string",
+                        "example": "6388007e80b129a969d09ac9"
                     },
                     "nome": {
                         "type": "string",
@@ -379,7 +383,7 @@
                     },
                     "senha": {
                         "type": "string",
-                        "example": "12345"
+                        "example": "G2t4#578"
                     }
                 }
             }
