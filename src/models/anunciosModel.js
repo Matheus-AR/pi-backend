@@ -43,8 +43,8 @@ const anuncioSchema = mongoose.Schema({
     contato: {
         type: String,
         trim: true,
-        minLength: [10, 'O contato deve ter pelo menos 9 caracteres'],
-        maxLength: [13, 'O contato deve ter até 12 caracteres'],
+        minLength: [13, 'O contato deve ter pelo menos 9 caracteres'],
+        maxLength: [16, 'O contato deve ter até 12 caracteres'],
         required: [ true, 'O contato é obrigatório']
     }
 }, {
