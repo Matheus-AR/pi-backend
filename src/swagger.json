@@ -2,6 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Sistema de classificação de anúncios",
+        "description": "Esta API tem como objetivo classificar anúncios de diversos tipos",
         "version": "1.0.0"
     },
     "servers": [
@@ -12,7 +13,8 @@
     "paths": {
         "/anuncios": {
             "get": {
-                "description": "Listar todos os anúncios criados.",
+                "summary": "Listar todos os anúncios criados",
+                "description": "Esta rota será responsável por listar todos os anúncios criados.",
                 "tags": ["Anuncios"],
                 "responses": {
                     "200": {
@@ -31,8 +33,10 @@
                 }
             },
             "post": {
+                "summary": "Criar anúncios",
+                "description": "Esta rota será responsável por criar anúncios.",
                 "tags": ["Anuncios"],
-                "description": "Criar um anúncio.",
+                "security": [{ "bearerAuth": [] }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -71,7 +75,8 @@
         },
         "/anuncios/cidades": {
             "get": {
-                "description": "Listar todos os anúncios da mesma cidade.",
+                "summary": "Listar anúncios por cidade",
+                "description": "Esta rota será responsável por listar anúncios que estão localizados em uma mesma cidade.",
                 "tags": ["Anuncios"],
                 "parameters": [
                     {
@@ -99,7 +104,8 @@
         },
         "/anuncios/categorias": {
             "get": {
-                "description": "Listar todos os anúncios da mesma categoria.",
+                "summary": "Listar anúncios por categoria",
+                "description": "Esta rota será responsável por listar anúncios da mesma categoria.",
                 "tags": ["Anuncios"],
                 "parameters": [
                     {
@@ -127,7 +133,8 @@
         },
         "/anuncios/{id}": {
             "get": {
-                "description": "Listar anúncio pelo id.",
+                "summary": "Mostrar anúncio por id",
+                "description": "Esta rota será responsável por buscar um anúncio específico.",
                 "tags": ["Anuncios"],
                 "parameters": [
                     {
@@ -154,7 +161,8 @@
                 }
             },
             "put": {
-                "description": "Alterar anúncio.",
+                "summary": "Alterar anúncio",
+                "description": "Esta rota será responsével por alterar os anúncios.",
                 "tags": ["Anuncios"],
                 "parameters": [
                     {
@@ -163,6 +171,7 @@
                         "required": true
                     }
                 ],
+                "security": [{ "bearerAuth": [] }],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -177,7 +186,8 @@
                                         "categoria": "Básico",
                                         "preco": 12.99,
                                         "anunciante": "Matheus",
-                                        "contato": "1111-1111"
+                                        "cidade": "Brasília",
+                                        "contato": "(61)1111-1111"
                                     }
                                 }
                             }
@@ -185,16 +195,11 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Anúncio alterado.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "$ref": "#components/schemas/Anuncios"
-                                }
-                            }
-                        }
+                    "204": {
+                        "description": "Anúncio alterado."
+                    },
+                    "401": {
+                        "description": "Esta resposta será dada caso o usuário não tenha autorização."
                     },
                     "404": {
                         "description": "Anúncio não encontrado."
@@ -202,7 +207,8 @@
                 }
             },
             "delete": {
-                "description": "Apagar um anúncio especificado pelo id.",
+                "summary": "Remover anúncios",
+                "description": "Esta rota será responsável por remover anúncios.",
                 "tags": ["Anuncios"],
                 "parameters": [
                     {
@@ -211,6 +217,7 @@
                         "required": true
                     }
                 ],
+                "security": [{ "bearerAuth": [] }],
                 "responses": {
                     "200": {
                         "description": "Anúncio foi removido, não retorna nenhum conteúdo.",
@@ -231,7 +238,8 @@
         },
         "/usuarios/registro": {
             "post": {
-                "description": "Criar um conta de usuário",
+                "summary": "Registrar usuário",
+                "description": "Esta rota será responsável por registrar novos usuários.",
                 "tags": ["Usuários"],
                 "requestBody": {
                     "content": {
@@ -269,7 +277,8 @@
         },
         "/usuarios/login":{
             "post": {
-                "description": "Criar um conta de usuário",
+                "summary": "Login de usuário",
+                "description": "Esta rota será responsável por realizar o login do usuário.",
                 "tags": ["Usuários"],
                 "requestBody": {
                     "content": {
@@ -281,9 +290,8 @@
                             "examples": {
                                 "Usuario": {
                                     "value": {
-                                        "nome": "Matheus",
                                         "email": "matheus@gmail.com",
-                                        "senha": "12345"
+                                        "senha": "1G3t5$#8"
                                     }
                                 }
                             }
@@ -291,24 +299,38 @@
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Usuário criado.",
+                    "200": {
+                        "summary": "Usuário logado",
+                        "description": "Esta será a resposta em caso de sucesso.",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "$ref": "#components/schemas/Usuarios"
+                                "examples": {
+                                    "Usuario": {
+                                        "value": {
+                                            "email": "matheus@gmail.com",
+                                            "token": "eyJhbhciOiJIUz65NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzODgwMDdlODBiMT6DYTk2OWQwOWFjOSIsImlhdCI6MTY2OTg1NzQzMSwiZXhwIjoxNjY5OTQzODMxfQ.TRDUtsYeR7BJtVd79m-Mfw4KuvZXzjrsXk9lSGkokks"
+                                        }
+                                    }
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "summary": "Usuário sem autorização",
+                        "description": "Esta resposta será dada caso o usuário não tenha autorização."
+                    },
+                    "404": {
+                        "summary": "Usuário não cadastrado",
+                        "description": "Esta será a resposta caso usuário não esteja cadastrado."
                     }
                 }
             }
         },
         "/usuarios/{id}": {
             "delete": {
+                "summary": "Remover usuário",
+                "description": "Esta rota será responsável por remover usuário.",
                 "tags": ["Usuários"],
-                "description": "Remover um usuário pelo id.",
                 "parameters": [
                     {
                         "name": "id",
@@ -316,6 +338,7 @@
                         "required": true
                     }
                 ],
+                "security": [{ "bearerAuth": [] }],
                 "responses": {
                     "204": {
                         "description": "Usuário removido."
@@ -386,6 +409,13 @@
                         "example": "G2t4#578"
                     }
                 }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
         }
     }
