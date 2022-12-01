@@ -229,24 +229,45 @@
                 }
             }
         },
-        "/usuarios": {
-            "get": {
+        "/usuarios/registro": {
+            "post": {
+                "description": "Criar um conta de usuário",
                 "tags": ["Usuários"],
-                "description": "Listar todos os usuários",
-                
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#components/schemas/Usuarios"
+                            },
+                            "examples": {
+                                "Usuario": {
+                                    "value": {
+                                        "nome": "Matheus",
+                                        "email": "matheus@gmail.com",
+                                        "senha": "12345"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
+                    "201": {
+                        "description": "Usuário criado.",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
+                                    "type": "object",
                                     "$ref": "#components/schemas/Usuarios"
                                 }
                             }
                         }
                     }
                 }
-            },
+            }
+        },
+        "/usuarios/login":{
             "post": {
                 "description": "Criar um conta de usuário",
                 "tags": ["Usuários"],
@@ -285,53 +306,6 @@
             }
         },
         "/usuarios/{id}": {
-            "put": {
-                "tags": ["Usuários"],
-                "description": "Alterar um usuário pelo id.",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "$ref": "#components/schemas/Usuarios"
-                            },
-                            "examples": {
-                                "Usuario": {
-                                    "value": {
-                                        "nome": "Matheus",
-                                        "email": "matheus@gmail.com",
-                                        "senha": "12345"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Usuário criado.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "$ref": "#components/schemas/Usuarios"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Usuário não foi encontrado."
-                    }
-                }
-
-            },
             "delete": {
                 "tags": ["Usuários"],
                 "description": "Remover um usuário pelo id.",
