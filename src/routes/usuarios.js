@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const usuariosController = require('../controllers/usuarios');
+const autenticacao = require('../middleware/authMiddleware');
 
-router.post('/', usuariosController.criarUsuario);
+router.post('/registro', usuariosController.criarUsuario);
 
-router.put('/:id', usuariosController.alterarUsuario);
+router.post('/login', usuariosController.login);
 
-router.delete('/:id', usuariosController.removerUsuario);
+router.delete('/', autenticacao, usuariosController.removerUsuario);
 
 module.exports = router;
