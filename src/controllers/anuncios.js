@@ -1,5 +1,6 @@
 const { ObjectId } = require('bson');
 const Anuncio = require('../models/anunciosModel');
+const Usuario = require('../models/usuariosModel');
 
 async function listarPorCidade(req, res, next){
     await Anuncio.find({cidade: req.query.cidade})
@@ -45,9 +46,22 @@ async function listarPorId(req, res, next){
 };
 
 async function criarAnuncio(req, res, next){
+    const idAutorizacao = req.body.id
+    const { emailAnunciante } = req.body;
+    const usuario = await Usuario.findOne({ email: emailAnunciante })
+
+    if (!usuario) {
+        return res.status(404).json({ erro: 'Usuário não cadastrado' });
+    }
+
+    if (idAutorizacao !== String(usuario._id)) {
+        return res.status(401).json({ erro: 'Não autorizado' });
+    }
     const anuncio = new Anuncio(req.body);
     await anuncio.save()
-        .then(doc => { return res.status(201).json(doc)})
+        .then(doc => { 
+            return res.status(201).json(doc)
+        })
         .catch(error => {
             const msg = {};
             if (error.errors) {
@@ -60,9 +74,16 @@ async function criarAnuncio(req, res, next){
 };
 
 async function alterarAnuncio(req, res, next){
+    const usuario = await Usuario.findOne({_id: ObjectId(req.body.id)})
     await Anuncio.findOneAndUpdate({_id: ObjectId(req.params.id)}, req.body, { runValidators: true})
         .then(anuncio => {
-            if (anuncio) return res.status(204).end();
+            if (anuncio.emailAnunciante !== usuario.email) {
+                return res.status(401).json({ erro: 'Não autorizado'});
+            }
+            if (anuncio) {
+                console.log(anuncio);
+                return res.status(204).end();
+            }
             else return res.status(404).json({ erro: 'Anúncio não encontrado' });
         })
         .catch(error => {
@@ -77,10 +98,17 @@ async function alterarAnuncio(req, res, next){
 };
 
 async function removerAnuncio(req, res, next){
+    const usuario = await Usuario.findOne({_id: ObjectId(req.body.id)})
     await Anuncio.findOneAndDelete({_id: ObjectId(req.params.id)})
         .then(anuncio => {
-            if (anuncio) return res.status(204).end();
-            else return res.status(404).json({ erro: 'Anúncio não encontrado' })
+            if (anuncio.emailAnunciante !== usuario.email) {
+                return res.status(401).json({ erro: 'Não autorizado' })
+            }
+            if (anuncio) {
+                return res.status(204).end();
+            } else {
+                return res.status(404).json({ erro: 'Anúncio não encontrado' });
+            }
         })
         .catch(error => {
             return res.status(422).json({ erro: error.message });
